@@ -8,16 +8,28 @@ import CardComponent from '../components/CardComponent';
 
 Vue.use(VueRouter); // 라이브러리 사용
 
+// 인증 함수
+const requireAuth = (to, from, next) => {
+  const isAuth = localStorage.getItem('token');
+  const loginPath = `/login?rPath=${encodeURIComponent(to.path)}`;
+  isAuth ? next() : next(loginPath);
+  console.log(to.path);
+};
+
 const router = new VueRouter({
   mode: 'history', // history 라우팅 사용. 기본값은 해쉬.
   routes: [
-    { path: '/', component: HomeComponent },
+    // beforEnter: navigation guard. 어떤 라우트로 접근하기 전에 인증하는 vue-router 함수 프로퍼티
+    { path: '/', component: HomeComponent, beforeEnter: requireAuth },
     { path: '/login', component: LoginComponent },
-    // children 프로퍼티로 중첩라우팅 구현
     {
       path: '/b/:bId',
       component: BoardComponent,
-      children: [{ path: 'c/:cId', component: CardComponent }]
+      beforeEnter: requireAuth,
+      children: [
+        // children 프로퍼티로 중첩라우팅 구현
+        { path: 'c/:cId', component: CardComponent, beforeEnter: requireAuth }
+      ]
     },
     { path: '*', component: NotFound } // 위에 라우팅되지 않은 경로로 접근하면 404 page.
   ]

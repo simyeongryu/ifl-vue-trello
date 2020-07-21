@@ -21,6 +21,7 @@
 
 <script>
 import { board } from '../api';
+import axios from 'axios';
 
 export default {
   data() {
@@ -30,7 +31,7 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
     this.fetchData();
   },
 

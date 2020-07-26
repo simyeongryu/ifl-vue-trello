@@ -17,13 +17,28 @@ const request = (method, url, data) => {
     .catch(res => {
       const { status } = res.response;
 
-      if (status === UNAUTHORIZED) return onUnauthorized();
-      throw Error(res);
+      if (status === UNAUTHORIZED) {
+        onUnauthorized();
+      }
+
+      throw res.response;
     });
+};
+
+export const setAuthInHeader = token => {
+  axios.defaults.headers.common['Authorization'] = token
+    ? `Bearer ${token}`
+    : null;
 };
 
 export const board = {
   fetch() {
     return request('get', '/boards');
+  }
+};
+
+export const auth = {
+  login(email, password) {
+    return request('post', '/login', { email, password });
   }
 };

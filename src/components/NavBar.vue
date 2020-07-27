@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link>
     </div>
     <div class="header-auth">
-      <a href="" v-if="isAuth" @click.prevent="logout">Logout</a>
+      <router-link to v-if="isAuth" @click.prevent="logout">Logout</router-link>
       <router-link v-else to="/login">Login</router-link>
       <!-- <a>Logout</a> -->
     </div>
@@ -12,22 +12,22 @@
 </template>
 
 <script>
-import { setAuthInHeader } from '../api';
+import { setAuthInHeader } from "../api";
 
 export default {
   computed: {
     isAuth() {
-      return localStorage.getItem('token');
-    }
+      return localStorage.getItem("token");
+    },
   },
 
   methods: {
     logout() {
       delete localStorage.token;
       setAuthInHeader(null);
-      this.$router.push('/login');
-    }
-  }
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 

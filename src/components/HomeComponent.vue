@@ -14,31 +14,41 @@
         </router-link>
       </div>
       <div class="board-item board-item-new">
-        <a class="new-board-btn" href @click.prevent="addBoard">Create new board...</a>
+        <a class="new-board-btn" href @click.prevent="addBoard"
+          >Create new board...</a
+        >
       </div>
     </div>
-    <add-board v-if="isAddBoard" @close="isAddBoard = false" @submit="onAddBoard" />
+    <add-board
+      v-if="isAddBoard"
+      @close="isAddBoard = false"
+      @submit="onAddBoard"
+    />
   </div>
 </template>
 
 <script>
-import { board } from "../api";
-import AddBoard from "./AddBoard";
+import { mapState } from 'vuex';
+import { board } from '../api';
+import AddBoard from './AddBoard';
 
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   components: {
-    AddBoard,
+    AddBoard
   },
 
   data() {
     return {
       loading: false,
       boards: [],
-      error: "",
-      isAddBoard: false,
+      error: ''
     };
+  },
+
+  computed: {
+    ...mapState(['isAddBoard'])
   },
 
   created() {
@@ -46,7 +56,7 @@ export default {
   },
 
   updated() {
-    this.$refs.boardItem.forEach((el) => {
+    this.$refs.boardItem.forEach(el => {
       el.style.backgroundColor = el.dataset.bgcolor;
     });
   },
@@ -56,24 +66,24 @@ export default {
       this.loading = true;
       board
         .fetch()
-        .then((data) => {
+        .then(data => {
           this.boards = data.list;
         })
-        .finally((_) => {
+        .finally(_ => {
           this.loading = false;
         });
     },
 
     addBoard() {
-      this.isAddBoard = true;
+      // isAddBoard
     },
 
     onAddBoard(title) {
       board.create(title).then(() => {
         this.fetchData;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,9 +1,12 @@
+// entry point
 import Vue from 'vue';
-import router from './router'; // 폴더 이름만 명시하면 index.js 를 가져온다
+import router from './router';
 import App from './App.vue';
+import store from './store';
 
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 });

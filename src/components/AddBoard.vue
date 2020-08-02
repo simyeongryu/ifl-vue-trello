@@ -3,9 +3,11 @@
     <div slot="header">
       <h2>
         Create new board
-        <a href="" class="modal-default-button" @click.prevent="close">
-          &times;
-        </a>
+        <a
+          href
+          class="modal-default-button"
+          @click.prevent="SET_IS_ADD_BOARD(false)"
+        >&times;</a>
       </h2>
     </div>
     <div slot="body">
@@ -20,32 +22,31 @@
         type="submit"
         form="add-board-form"
         :disabled="!valid"
-      >
-        Create Board
-      </button>
+      >Create Board</button>
     </div>
   </VModal>
 </template>
 
 <script>
-import VModal from './VModal.vue';
+import VModal from "./VModal.vue";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
-    VModal
+    VModal,
   },
 
   data() {
     return {
-      input: '',
-      valid: false
+      input: "",
+      valid: false,
     };
   },
 
   watch: {
     input(v) {
       this.valid = v.trim().length > 0;
-    }
+    },
   },
 
   mounted() {
@@ -53,16 +54,17 @@ export default {
   },
 
   methods: {
-    close() {
-      // close 라는 이름의 이벤트를 발생시킨다.
-      this.$emit('close');
-    },
+    ...mapMutations(["SET_IS_ADD_BOARD"]),
+
+    // close() {
+    //   this.$emit("close"); // close 라는 이름의 이벤트를 발생시킨다.
+    // },
 
     addBoard() {
-      this.$emit('close');
-      this.$emit('submit', this.input); //input 의 밸류값을 인자로 받는다.
-    }
-  }
+      this.SET_IS_ADD_BOARD(false); // mutation 사용하기
+      this.$emit("submit", this.input); //input 의 밸류값을 인자로 받는다.
+    },
+  },
 };
 </script>
 

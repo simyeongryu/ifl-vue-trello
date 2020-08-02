@@ -40,4 +40,7 @@ SPA 는 서버 API에서 받아온다.
 
 ## axios wrapping 해서 사용하기
 
+## mutation은 동기적, action 은 비동기
+
+변이는 무조건 동기. 비동기 처리는 action으로 처리한다.
 

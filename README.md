@@ -44,3 +44,7 @@ SPA 는 서버 API에서 받아온다.
 
 변이는 무조건 동기. 비동기 처리는 action으로 처리한다.
 
+action은 변이와 유사하지만 상태를 변이시키지 않는다.
+
+action은 mutation을 실행시켜서 state를 변화시킨다.
+

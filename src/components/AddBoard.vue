@@ -29,7 +29,7 @@
 
 <script>
 import VModal from "./VModal.vue";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
@@ -56,13 +56,13 @@ export default {
   methods: {
     ...mapMutations(["SET_IS_ADD_BOARD"]),
 
-    // close() {
-    //   this.$emit("close"); // close 라는 이름의 이벤트를 발생시킨다.
-    // },
+    ...mapActions(["ADD_BOARD", "FETCH_BOARDS"]),
 
     addBoard() {
-      this.SET_IS_ADD_BOARD(false); // mutation 사용하기
-      this.$emit("submit", this.input); //input 의 밸류값을 인자로 받는다.
+      this.SET_IS_ADD_BOARD(false);
+      this.ADD_BOARD({ title: this.input }).then(() => {
+        this.FETCH_BOARDS();
+      });
     },
   },
 };

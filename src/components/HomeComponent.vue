@@ -17,12 +17,12 @@
         <a class="new-board-btn" href @click.prevent="SET_IS_ADD_BOARD(true)">Create new board...</a>
       </div>
     </div>
-    <add-board v-if="isAddBoard" @close="isAddBoard = false" @submit="onAddBoard" />
+    <add-board v-if="isAddBoard" @close="isAddBoard = false" />
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { board } from "../api";
 import AddBoard from "./AddBoard";
 
@@ -36,13 +36,12 @@ export default {
   data() {
     return {
       loading: false,
-      boards: [],
       error: "",
     };
   },
 
   computed: {
-    ...mapState(["isAddBoard"]),
+    ...mapState(["isAddBoard", "boards"]),
   },
 
   created() {
@@ -56,8 +55,8 @@ export default {
   },
 
   methods: {
-    // mapMutations
     ...mapMutations(["SET_IS_ADD_BOARD"]),
+    ...mapActions(["FETCH_BOARDS"]),
 
     // addBoard() {
     //   this.$store.commit("SET_IS_ADD_BOARD", true);
@@ -65,19 +64,9 @@ export default {
 
     fetchData() {
       this.loading = true;
-      board
-        .fetch()
-        .then((data) => {
-          this.boards = data.list;
-        })
-        .finally((_) => {
-          this.loading = false;
-        });
-    },
 
-    onAddBoard(title) {
-      board.create(title).then(() => {
-        this.fetchData;
+      this.FETCH_BOARDS().finally((_) => {
+        this.loading = false;
       });
     },
   },

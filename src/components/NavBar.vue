@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link>
     </div>
     <div class="header-auth">
-      <router-link to v-if="isAuth" @click.prevent="logout">Logout</router-link>
+      <a v-if="isAuth" @click="logout">Logout</a>
       <router-link v-else to="/login">Login</router-link>
       <!-- <a>Logout</a> -->
     </div>
@@ -12,19 +12,18 @@
 </template>
 
 <script>
-import { setAuthInHeader } from "../api";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   computed: {
-    isAuth() {
-      return localStorage.getItem("token");
-    },
+    ...mapGetters(["isAuth"]),
   },
 
   methods: {
+    ...mapMutations(["LOGOUT"]),
+
     logout() {
-      delete localStorage.token;
-      setAuthInHeader(null);
+      this.LOGOUT();
       this.$router.push("/login");
     },
   },
@@ -45,6 +44,7 @@ export default {
   line-height: 30px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
 }
 
 .header-logo {

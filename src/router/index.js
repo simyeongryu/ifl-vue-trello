@@ -5,15 +5,14 @@ import LoginComponent from '../components/LoginComponent';
 import NotFound from '../components/NotFound';
 import BoardComponent from '../components/BoardComponent';
 import CardComponent from '../components/CardComponent';
+import store from '../store'
 
 Vue.use(VueRouter); // 라이브러리 사용
 
 // 인증 함수
 const requireAuth = (to, from, next) => {
-  const isAuth = localStorage.getItem('token');
   const loginPath = `/login?rPath=${encodeURIComponent(to.path)}`;
-  isAuth ? next() : next(loginPath);
-  console.log(to.path);
+  store.getters.isAuth ? next() : next(loginPath);
 };
 
 const router = new VueRouter({

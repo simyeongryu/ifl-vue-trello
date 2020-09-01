@@ -4,6 +4,7 @@
     <div v-if="loading">Loading Board...</div>
     <div v-else>
       <div>bId : {{ bId }}</div>
+      <pre>{{ board }}</pre>
       <router-link :to="`/b/${bId}/c/1`">Card 1</router-link>
       <router-link :to="`/b/${bId}/c/2`">Card 2</router-link>
     </div>
@@ -14,7 +15,7 @@
 </template>
 
 <script>
-let timeout = null;
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -24,24 +25,28 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState([
+      'board'
+    ])
+  },
+
   created() {
     this.fetchData();
   },
 
   methods: {
+    ...mapActions([
+      'FETCH_BOARD'
+    ]),
+
     fetchData() {
       this.loading = true;
-
-      timeout = setTimeout(() => {
-        this.bId = this.$route.params.bId; // this.$route 를 통해 해당 route의 정보를 얻을 수 있다.
-        this.loading = false;
-      }, 500);
+      this.FETCH_BOARD({id: this.$route.params.bId})
+        .then(() => this.loading = false);
     }
   },
 
-  destroyed() {
-    clearTimeout(timeout);
-  }
 };
 </script>
 

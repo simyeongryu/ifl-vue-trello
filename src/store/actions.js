@@ -13,7 +13,6 @@ const actions = {
 
   FETCH_BOARD({ commit }, {id}) {
     return api.board.fetch(id).then(data => {
-      console.log(data)
       commit('SET_BOARD', data.item);
     });
   },

@@ -3,38 +3,43 @@
     <div class="list-header">
       <div class="list-header-title">{{data.title}}</div>
     </div>
+    <div class="card-list">
+      <CardItem v-for="card in data.cards" :key="card.id" :data="card" />
+    </div>
     <div v-if="isAddCard">
-      <AddCard @close="isAddCard = false" />
+      <AddCard :list-id="data.id" @close="isAddCard = false" />
     </div>
     <div v-else>
       <!-- stop 해주는 이유. -->
       <!-- 여기서 click 이벤트가 발생하면 이벤트 버블링이 발생한다. -->
       <!-- 상위 엘레먼트에서 click 이벤트가 발생하게 되고 AddCard에서 emit close가 발생한다. -->
-      <a href="" class="add-card-btn" @click.prevent.stop="isAddCard = true">
-        &plus; Add a card
-      </a>
+      <a href class="add-card-btn" @click.prevent.stop="isAddCard = true">&plus; Add a card</a>
     </div>
   </div>
 </template>
 
 <script>
-import AddCard from './AddCard';
+import AddCard from "./AddCard";
+import CardItem from "./CardItem";
 
 export default {
   components: {
-    AddCard
+    AddCard,
+    CardItem,
   },
 
   props: ["data"],
 
   data() {
     return {
-      isAddCard: false
-    }
-  }
+      isAddCard: false,
+    };
+  },
 
-  
- };
+  mounted() {
+    console.log(this.data);
+  },
+};
 </script>
 
 <style>

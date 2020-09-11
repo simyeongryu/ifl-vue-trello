@@ -11,7 +11,7 @@ const actions = {
     });
   },
 
-  FETCH_BOARD({ commit }, {id}) {
+  FETCH_BOARD({ commit }, { id }) {
     return api.board.fetch(id).then(data => {
       commit('SET_BOARD', data.item);
     });
@@ -20,6 +20,11 @@ const actions = {
   LOGIN({ commit }, { email, password }) {
     return api.auth.login(email, password)
       .then(({ accessToken }) => commit('LOGIN', accessToken));
+  },
+
+  ADD_CARD({ dispatch, state }, { title, listId, pos }) {
+    return api.card.create(title, listId, pos)
+      .then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
   }
 }
 

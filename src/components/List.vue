@@ -35,10 +35,6 @@ export default {
       isAddCard: false,
     };
   },
-
-  mounted() {
-    console.log(this.data);
-  },
 };
 </script>
 

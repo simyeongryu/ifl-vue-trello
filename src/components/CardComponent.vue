@@ -1,46 +1,78 @@
 <template>
-  <div>
-    Card
-    <div v-if="loading">Loading Cards...</div>
-    <div v-else>cId: {{ cId }}</div>
-  </div>
+  <VModal class="modal-card">
+    <div slot="header" class="modal-card-header">
+      <div class="modal-card-header-title">
+        <input type="text" class="form-control" v-model="card.title" readonly />
+      </div>
+      <a href class="modal-close-btn" @click.prevent="onClose">&times;</a>
+    </div>
+    <div slot="body">
+      <h3>Description</h3>
+      <textarea
+        cols="30"
+        rows="3"
+        class="form-control"
+        placeholder="Add a more detailed description..."
+        v-model="card.description"
+        readonly
+      ></textarea>
+    </div>
+    <div slot="footer"></div>
+  </VModal>
 </template>
 
 <script>
-let timeout = null;
+import { mapActions, mapState } from "vuex";
+import VModal from "./VModal";
 
 export default {
-  data() {
-    return {
-      cId: 0,
-      loading: false
-    };
+  components: {
+    VModal,
   },
 
-  // $route의 변화를 감지하여 특정 코드를 실행
-  watch: {
-    // watch 내부를 함수가 아니라 객체형태로도 정의할 수 있다.
-    $route: {
-      handler: 'fetchData', // $route가 변할 때 실행할 함수
-      immediate: true // 즉시 실행
-    }
+  computed: {
+    ...mapState({
+      card: "card",
+      board: "board",
+    }),
+  },
+
+  created() {
+    const id = this.$route.params.cId;
+    this.FETCH_CARD({ id });
   },
 
   methods: {
-    fetchData() {
-      this.loading = true;
+    ...mapActions(["FETCH_CARD"]),
 
-      timeout = setTimeout(() => {
-        this.cId = this.$route.params.cId;
-        this.loading = false;
-      }, 500);
-    }
+    onClose() {
+      this.$router.push(`/b/${this.board.id}`);
+    },
   },
-
-  destroyed() {
-    clearTimeout(timeout);
-  }
 };
 </script>
 
-<style></style>
+<style>
+.modal-card .modal-container {
+  min-width: 300px;
+  max-width: 800px;
+  width: 60%;
+}
+
+.modal-card-header-title {
+  padding-right: 30px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 24px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.modal-card-header {
+  position: relative;
+}
+</style>

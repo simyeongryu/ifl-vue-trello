@@ -26,8 +26,7 @@ const router = new VueRouter({
       component: BoardComponent,
       beforeEnter: requireAuth,
       children: [
-        // children 프로퍼티로 중첩라우팅 구현
-        { path: 'c/:cId', component: CardComponent, beforeEnter: requireAuth }
+        { path: 'c/:cId', component: CardComponent, beforeEnter: requireAuth } // children 프로퍼티로 중첩라우팅 구현
       ]
     },
     { path: '*', component: NotFound } // 위에 라우팅되지 않은 경로로 접근하면 404 page.

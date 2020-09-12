@@ -2,7 +2,15 @@
   <VModal class="modal-card">
     <div slot="header" class="modal-card-header">
       <div class="modal-card-header-title">
-        <input type="text" class="form-control" v-model="card.title" readonly />
+        <input
+          type="text"
+          class="form-control"
+          v-model="card.title"
+          :readonly="!toggleTitle"
+          @click="toggleTitle = true"
+          @blur="onBlurTitle"
+          ref="inputTitle"
+        />
       </div>
       <a href class="modal-close-btn" @click.prevent="onClose">&times;</a>
     </div>
@@ -14,7 +22,10 @@
         class="form-control"
         placeholder="Add a more detailed description..."
         v-model="card.description"
-        readonly
+        :readonly="!toggleDescription"
+        @click="toggleDescription = true"
+        @blur="onBlurDescription"
+        ref="inputDescription"
       ></textarea>
     </div>
     <div slot="footer"></div>
@@ -30,6 +41,13 @@ export default {
     VModal,
   },
 
+  data() {
+    return {
+      toggleTitle: false,
+      toggleDescription: false,
+    };
+  },
+
   computed: {
     ...mapState({
       card: "card",
@@ -38,15 +56,42 @@ export default {
   },
 
   created() {
-    const id = this.$route.params.cId;
-    this.FETCH_CARD({ id });
+    this.fetchCard();
   },
 
   methods: {
-    ...mapActions(["FETCH_CARD"]),
+    ...mapActions(["FETCH_CARD", "UPDATE_CARD"]),
 
     onClose() {
       this.$router.push(`/b/${this.board.id}`);
+    },
+    // 중복해서 사용되는 코드가 있으면 메소드로 묶는다.
+    fetchCard() {
+      const id = this.$route.params.cId;
+      this.FETCH_CARD({ id });
+    },
+
+    onBlurTitle() {
+      this.toggleTitle = false;
+
+      const title = this.$refs.inputTitle.value.trim();
+
+      if (!title) return;
+      this.UPDATE_CARD({ id: this.card.id, title }).then(() =>
+        this.fetchCard()
+      );
+    },
+
+    onBlurDescription() {
+      this.toggleDescription = false;
+
+      const description = this.$refs.inputDescription.value.trim();
+
+      if (!description) return;
+
+      this.UPDATE_CARD({ id: this.card.id, description }).then(() =>
+        this.fetchCard()
+      );
     },
   },
 };

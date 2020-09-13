@@ -48,3 +48,6 @@ action은 변이와 유사하지만 상태를 변이시키지 않는다.
 
 action은 mutation을 실행시켜서 state를 변화시킨다.
 
+# dragula
+
+드래그 앤 드랍을 위한 라이브러리

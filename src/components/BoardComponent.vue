@@ -21,6 +21,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import List from "./List";
+import dragger from "../utils/dragger";
 
 export default {
   components: {
@@ -31,6 +32,7 @@ export default {
     return {
       bId: 0,
       loading: false,
+      cDragger: null,
     };
   },
 
@@ -42,14 +44,49 @@ export default {
     this.fetchData();
   },
 
+  updated() {
+    this.setCardDraggable();
+  },
+
   methods: {
-    ...mapActions(["FETCH_BOARD"]),
+    ...mapActions(["FETCH_BOARD", "UPDATE_CARD"]),
 
     fetchData() {
       this.loading = true;
       this.FETCH_BOARD({ id: this.$route.params.bId }).then(
         () => (this.loading = false)
       );
+    },
+
+    setCardDraggable() {
+      if (this.cDragger) this.cDragger.destroy();
+      this.cDragger = dragger.init(
+        Array.from(this.$el.querySelectorAll(".card-list"))
+      );
+
+      this.cDragger.on("drop", (el, wrapper, target, siblings) => {
+        const targetCard = {
+          id: +el.dataset.cardId,
+          pos: 65535,
+        };
+
+        const { prev, next } = dragger.sibling({
+          el,
+          wrapper,
+          candidates: Array.from(wrapper.querySelectorAll(".card-item")),
+          type: "card",
+        });
+
+        if (!prev && next) {
+          targetCard.pos = next.pos / 2;
+        } else if (!next && prev) {
+          targetCard.pos = prev.pos * 2;
+        } else if (prev && next) {
+          targetCard.pos = (prev.pos + next.pos) / 2;
+        }
+
+        this.UPDATE_CARD(targetCard);
+      });
     },
   },
 };

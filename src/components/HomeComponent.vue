@@ -25,7 +25,6 @@
 import { mapState, mapMutations, mapActions } from "vuex";
 import { board } from "../api";
 import AddBoard from "./AddBoard";
-
 import axios from "axios";
 
 export default {
@@ -46,6 +45,7 @@ export default {
 
   created() {
     this.fetchData();
+    this.SET_THEME();
   },
 
   updated() {
@@ -55,12 +55,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["SET_IS_ADD_BOARD"]),
+    ...mapMutations(["SET_IS_ADD_BOARD", "SET_THEME"]),
     ...mapActions(["FETCH_BOARDS"]),
-
-    // addBoard() {
-    //   this.$store.commit("SET_IS_ADD_BOARD", true);
-    // },
 
     fetchData() {
       this.loading = true;

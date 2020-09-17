@@ -17,6 +17,10 @@ const actions = {
     });
   },
 
+  DELETE_BOARD({ commit }, { id }) {
+    return api.board.destroy(id).then(() => commit('SET_IS_SHOW_BOARD_SETTINGS', false));
+  },
+
   LOGIN({ commit }, { email, password }) {
     return api.auth.login(email, password)
       .then(({ accessToken }) => commit('LOGIN', accessToken));

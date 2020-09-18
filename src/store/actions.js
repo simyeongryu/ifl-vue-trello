@@ -1,4 +1,5 @@
 import * as api from '../api';
+import state from './state';
 
 const actions = {
   ADD_BOARD(_, { title }) {
@@ -19,6 +20,10 @@ const actions = {
 
   DELETE_BOARD({ commit }, { id }) {
     return api.board.destroy(id).then(() => commit('SET_IS_SHOW_BOARD_SETTINGS', false));
+  },
+
+  UPDATE_BOARD({ dispatch, state }, { id, title, bgColor }) {
+    return api.board.update(id, { title, bgColor }).then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
   },
 
   LOGIN({ commit }, { email, password }) {

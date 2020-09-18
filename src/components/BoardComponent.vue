@@ -3,6 +3,7 @@
     <div class="board-wrapper">
       <div class="board">
         <div class="board-header">
+          <!-- @keyup.enter: 이벤트 키 이름을 케밥케이스로 변환하여 축양형으로 사용할 수 있다. -->
           <input
             v-if="isEditTitle"
             class="form-control"
@@ -118,6 +119,8 @@ export default {
     onClickTitle() {
       this.isEditTitle = true;
       // $nextTick
+      // 바로 focus()를 실행하면 해당 DOM이 생성되기도 전에 실행되어 원하는 결과를 얻을 수 없다.
+      // nextTick은 콜백함수로 넘어온 실행을 DOM 갱신 이후에 실행시킨다.
       this.$nextTick(() => this.$refs.inputTitle.focus());
     },
 

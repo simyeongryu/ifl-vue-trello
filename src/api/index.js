@@ -25,12 +25,20 @@ const request = (method, url, data) => {
     });
 };
 
+// AUTH
 export const setAuthInHeader = token => {
   axios.defaults.headers.common['Authorization'] = token
     ? `Bearer ${token}`
     : null;
 };
 
+export const auth = {
+  login(email, password) {
+    return request('post', '/login', { email, password });
+  }
+};
+
+// BOARD
 export const board = {
   fetch(id) {
     return id ? request('get', `/boards/${id}`) : request('get', '/boards');
@@ -49,13 +57,18 @@ export const board = {
   }
 };
 
-export const auth = {
-  login(email, password) {
-    return request('post', '/login', { email, password });
+// LIST
+export const list = {
+  create(payload) {
+    return request('post', '/lists', payload);
+  },
+
+  update(id, payload) {
+    return request('put', `/lists/${id}`, payload);
   }
 };
 
-
+// CARD
 export const card = {
   create(title, listId, pos) {
     return request('post', '/cards', { title, listId, pos });
@@ -72,4 +85,4 @@ export const card = {
   destroy(id) {
     return request('delete', `/cards/${id}`);
   }
-}
+};

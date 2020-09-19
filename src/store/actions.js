@@ -2,6 +2,13 @@ import * as api from '../api';
 import state from './state';
 
 const actions = {
+  // AUTH
+  LOGIN({ commit }, { email, password }) {
+    return api.auth.login(email, password)
+      .then(({ accessToken }) => commit('LOGIN', accessToken));
+  },
+
+  // BOARD
   ADD_BOARD(_, { title }) {
     return api.board.create(title).then(data => data.item);
   },
@@ -18,19 +25,29 @@ const actions = {
     });
   },
 
-  DELETE_BOARD({ commit }, { id }) {
-    return api.board.destroy(id).then(() => commit('SET_IS_SHOW_BOARD_SETTINGS', false));
-  },
-
   UPDATE_BOARD({ dispatch, state }, { id, title, bgColor }) {
-    return api.board.update(id, { title, bgColor }).then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
+    return api.board.update(id, { title, bgColor })
+      .then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
   },
 
-  LOGIN({ commit }, { email, password }) {
-    return api.auth.login(email, password)
-      .then(({ accessToken }) => commit('LOGIN', accessToken));
+  DELETE_BOARD({ commit }, { id }) {
+    return api.board.destroy(id)
+      .then(() => commit('SET_IS_SHOW_BOARD_SETTINGS', false));
   },
 
+
+  // LIST
+  ADD_LIST({ dispatch, state }, { title, boardId, pos }) {
+    return api.list.create({ title, boardId, pos })
+      .then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
+  },
+
+  UPDATE_LIST({ dispatch, state }, { id, pos, title }) {
+    return api.list.update(id, { pos, title })
+      .then(() => dispatch('FETCH_BOARD', { id: state.board.id }));
+  },
+
+  // CARD
   ADD_CARD({ dispatch, state }, { title, listId, pos }) {
     return api.card.create(title, listId, pos)
       .then(() => dispatch('FETCH_BOARD', { id: state.board.id }));

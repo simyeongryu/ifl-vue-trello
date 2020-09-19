@@ -3,7 +3,7 @@
     <div class="board-wrapper">
       <div class="board">
         <div class="board-header">
-          <!-- @keyup.enter: 이벤트 키 이름을 케밥케이스로 변환하여 축양형으로 사용할 수 있다. -->
+          <!-- @keyup.enter: 이벤트 키 이름을 케밥케이스로 변환하여 축약형으로 사용할 수 있다. -->
           <input
             v-if="isEditTitle"
             class="form-control"
@@ -21,6 +21,9 @@
             <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
               <List :data="list" />
             </div>
+            <div class="list-wrapper">
+              <AddList />
+            </div>
           </div>
         </div>
       </div>
@@ -33,12 +36,14 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import List from "./List";
+import AddList from "./AddList";
 import BoardSettings from "./BoardSetting";
 import dragger from "../utils/dragger";
 
 export default {
   components: {
     List,
+    AddList,
     BoardSettings,
   },
 

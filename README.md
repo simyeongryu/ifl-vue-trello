@@ -51,3 +51,16 @@ action은 mutation을 실행시켜서 state를 변화시킨다.
 # dragula
 
 드래그 앤 드랍을 위한 라이브러리
+
+# 구현해야 할 것 
+
+- 리스트 간 이동
+- store MUTATION 변수 처리
+
+## 작업 플로우
+
+항상 요구사항을 분석하고, 필요한 기술을 조사하고, 그 기술로 기능을 구현한다.
+
+- 요구사항: 기본 사항, 추가 사항
+- 기술조사: Vue, Vuex, Vue-router, axios, dragular
+- 기능구현: SPA, 인증, 트렐로 기능 구현

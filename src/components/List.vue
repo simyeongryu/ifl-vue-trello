@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :data-list-id="data.id" :data-list-pos="data.pos">
     <div class="list-header">
       <input
         v-if="isEditTitle"
@@ -11,6 +11,7 @@
         @keyup.enter="onSubmitTitle"
       />
       <div v-else class="list-header-title" @click="onClickTitle">{{ data.title }}</div>
+      <a href class="delete-list-btn" @click.prevent="onDeleteList">&times;</a>
     </div>
     <div class="card-list">
       <CardItem v-for="card in data.cards" :key="card.id" :data="card" />
@@ -53,7 +54,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["UPDATE_LIST"]),
+    ...mapActions(["UPDATE_LIST", "DELETE_LIST"]),
 
     onClickTitle() {
       this.isEditTitle = true;
@@ -77,6 +78,12 @@ export default {
       if (title === this.data.title) return;
 
       this.UPDATE_LIST({ id, title });
+    },
+
+    onDeleteList() {
+      if (!window.confirm(`Delete ${this.data.title} list?`)) return;
+
+      this.DELETE_LIST({ id: this.data.id });
     },
   },
 };

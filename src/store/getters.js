@@ -1,6 +1,6 @@
 const getters = {
   isAuth(state) {
-    return !!state.token
+    return state.token
   }
 }
 
